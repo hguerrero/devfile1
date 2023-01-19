@@ -35,7 +35,7 @@ components:
         value: $(JAVA_OPTS)
     memoryLimit: 768Mi
     endpoints:
-      - name: '8080/tcp'
+      - name: '8080tcp'
         port: 8080
     mountSources: true
     volumes:
