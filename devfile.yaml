@@ -11,15 +11,6 @@ projects:
       sparseCheckoutDir: "projects"
 components:
   -
-    type: chePlugin
-    id: redhat/vscode-xml/latest
-  -
-    type: chePlugin
-    id: redhat/vscode-apache-camel/latest
-  -
-    type: chePlugin
-    id: redhat/java/latest
-  -
     type: dockerimage
     alias: tools
     image: quay.io/redhatintegration/rhi-tools:latest
@@ -33,7 +24,7 @@ components:
           -Duser.home=/home/user"
       - name: MAVEN_OPTS
         value: $(JAVA_OPTS)
-    memoryLimit: 768Mi
+    memoryLimit: 4Gi
     endpoints:
       - name: '8080tcp'
         port: 8080
@@ -41,7 +32,3 @@ components:
     volumes:
       - name: m2
         containerPath: /home/user/.m2
-  - 
-    type: chePlugin
-    id: redhat/vscode-camelk/latest
-    alias: vscode-camelk
