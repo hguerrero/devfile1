@@ -1,34 +1,36 @@
----
-apiVersion: 1.0.0
+schemaVersion: 2.2.0
 metadata:
-  generateName: dil-streaming-
+  name: devsandbox-dil-streaming
 projects:
-  -
-    name: FleurDeLune
-    source:
-      type: git
-      location: "https://github.com/RedHat-Middleware-Workshops/dayinthelife-streaming"
-      sparseCheckoutDir: "projects"
-components:
-  -
-    type: dockerimage
-    alias: tools
-    image: quay.io/redhatintegration/rhi-tools:latest
-    env:
-      - name: MAVEN_CONFIG
-        value: ""
-      - name: JAVA_OPTS
-        value: "-XX:MaxRAMPercentage=50.0 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
-          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
-          -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom
-          -Duser.home=/home/user"
-      - name: MAVEN_OPTS
-        value: $(JAVA_OPTS)
-    memoryLimit: 4Gi
-    endpoints:
-      - name: '8080tcp'
-        port: 8080
-    mountSources: true
-    volumes:
-      - name: m2
-        containerPath: /home/user/.m2
+  - git:
+      remotes:
+        origin: >-
+          https://github.com/RedHat-Middleware-Workshops/dayinthelife-streaming.git
+    name: fleur-de-lune
+components:    
+  - name: universal-developer-image
+    attributes:
+      controller.devfile.io/merge-contribution: true
+      pod-overrides: {"spec":{"securityContext":{"runAsUser":1000}}}
+    container:
+      image: 'quay.io/redhatintegration/rhi-tools:latest'
+      cpuLimit: 500m
+      memoryLimit: 1.88G
+      volumeMounts:
+        - name: m2
+          path: /home/user/.m2
+      endpoints:
+        - attributes:
+            contributed-by: che-code.eclipse.org
+            cookiesAuthEnabled: true
+            discoverable: false
+            type: main
+            urlRewriteSupported: true
+          exposure: public
+          name: che-code
+          path: '?tkn=eclipse-che'
+          protocol: https
+          secure: false
+          targetPort: 3100
+  - name: m2
+    volume: {}
